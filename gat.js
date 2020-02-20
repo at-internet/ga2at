@@ -3,47 +3,47 @@ function GA2AT(tracker, config) {
   var log = config.log || 'logp.xiti.com';
   var pixel = config.pixel || 'hit.xiti';
 
-  ga(function(tracker) {
+  ga(function (tracker) {
 
     var originalSendHitTask = tracker.get('sendHitTask');
 
-    tracker.set('sendHitTask', function(model) {
+    tracker.set('sendHitTask', function (model) {
       originalSendHitTask(model);
 
-      let hitParams = null;
+      var hitParams = null;
 
-      if(site) {
-        const pageLabel = tracker.get('title');
-        const hitType = tracker.get('hitType');
+      if (site) {
+        var pageLabel = tracker.get('title');
+        var hitType = tracker.get('hitType');
 
-        if(hitType === 'pageview') {
-          hitParams = `&p=${pageLabel}`;
+        if (hitType === 'pageview') {
+          hitParams = '&p=' + encodeURIComponent(pageLabel);
         }
 
-        if(hitType === 'social') {
-          const socialNetwork = tracker.get('socialNetwork') || '';
-          const socialAction = tracker.get('socialAction') || '';
-          const socialTarget = tracker.get('socialTarget') || '';
+        if (hitType === 'social') {
+          var socialNetwork = tracker.get('socialNetwork') || '';
+          var socialAction = tracker.get('socialAction') || '';
+          var socialTarget = tracker.get('socialTarget') || '';
 
-          hitParams = `&p=social::${socialNetwork}::${socialAction}::${socialTarget}&click=a&type=click&pclick=${pageLabel}`;
+          hitParams = '&p=social::' + encodeURIComponent(socialNetwork) + '::' + encodeURIComponent(socialAction) + '::' + encodeURIComponent(socialTarget) + '&click=a&type=click&pclick=' + encodeURIComponent(pageLabel);
         }
 
-        if(hitType === 'event') {
-          const eventCategory = tracker.get('eventCategory') || '';
-          const eventAction = tracker.get('eventAction') || '';
-          const eventLabel = tracker.get('eventLabel') || '';
-          const eventValue = tracker.get('eventValue') || '';
+        if (hitType === 'event') {
+          var eventCategory = tracker.get('eventCategory') || '';
+          var eventAction = tracker.get('eventAction') || '';
+          var eventLabel = tracker.get('eventLabel') || '';
+          var eventValue = tracker.get('eventValue') || '';
 
-          hitParams = `&p=${eventCategory}::${eventAction}::${eventLabel}::${eventValue}&click=a&type=click&pclick=${pageLabel}`;
+          hitParams = '&p=' + encodeURIComponent(eventCategory) + '::' + encodeURIComponent(eventAction) + '::' + encodeURIComponent(eventLabel) + '::' + encodeURIComponent(eventValue) + '&click=a&type=click&pclick=' + encodeURIComponent(pageLabel);
         }
 
         if (hitParams) {
-          const idclient = tracker.get('clientId');
-          const ref = tracker.get('referrer') || '';
-          const base = `https://${log}/${pixel}?s=${site}&idclient=${idclient}`;
-          const suffix = `&ref=${ref}`;
+          var idclient = tracker.get('clientId');
+          var ref = tracker.get('referrer') || '';
+          var base = 'https://' + log + '/' + pixel + '?s=' + site + '&idclient=' + idclient;
+          var suffix = '&ref=' + ref;
 
-          const hit = base + hitParams + suffix
+          var hit = base + hitParams + suffix
           if (navigator.sendBeacon) {
             navigator.sendBeacon(hit);
           } else {
@@ -57,9 +57,9 @@ function GA2AT(tracker, config) {
   });
 }
 
-function providePlugin(pluginName, pluginConstructor) {
+function providePlugin(pluginName, pluginvarructor) {
   var ga = window[window['GoogleAnalyticsObject'] || 'ga'];
-  if (typeof ga == 'function') { ga('provide', pluginName, pluginConstructor); }
+  if (typeof ga == 'function') { ga('provide', pluginName, pluginvarructor); }
 }
 
 providePlugin('GA2AT', GA2AT);

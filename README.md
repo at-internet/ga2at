@@ -1,3 +1,14 @@
+<!-- TOC -->
+- [GA2AT](#ga2at)
+  - [Usage](#usage)
+    - [Full integration example](#full-integration-example)
+  - [How it works](#how-it-works)
+  - [Duplicated hit types](#duplicated-hit-types)
+    - [`pageview`](#pageview)
+    - [`event`](#event)
+    - [`social`](#social)
+<!-- /TOC -->
+
 # GA2AT
 
 GA2AT is a Google Analytics (analytics.js) plugin, duplicating GA tracking to AT Internet.
@@ -13,14 +24,15 @@ Integrate the gat.js script into your website:
 Ask GA to use the plugin, with the plugin's parameters:
 
 ```javascript
-ga('require', 'GA2AT', {site:123456, log:'log.xiti.com', pixel:'hit'})
+ga('require', 'GA2AT', {site:123456, log:'log.xiti.com', pixel:'hit', useTitle:false})
 ```
 
-|Parameter|Description      |Mandatory?         |Default value  |
-|---------|-----------------|:-----------------:|---------------|
-|`site`   |Site number      |:heavy_check_mark: |`null`         |
-|`log`    |Collection domain|:heavy_check_mark: |`logp.xiti.com`|
-|`pixel`  |Pixel path       |:x:                |`hit.xiti`     |
+|Parameter |Description                |Mandatory?         |Default value  |
+|----------|---------------------------|:-----------------:|---------------|
+|`site`    |Site number                |:heavy_check_mark: |`null`         |
+|`log`     |Collection domain          |:heavy_check_mark: |`logp.xiti.com`|
+|`pixel`   |Pixel path                 |:x:                |`hit.xiti`     |
+|`useTitle`|Use page title as page name|:x:                |`false`     |
 
 ### Full integration example
 
@@ -38,7 +50,7 @@ ga('require', 'GA2AT', {site:123456, log:'log.xiti.com', pixel:'hit'})
     ga('create', 'UA-XXXXXX-XX', 'auto');
 
     // Add GA2AT plugin
-    ga('require', 'GA2AT', {site:123456, log:'logp.xiti.com', pixel:'hit'})
+    ga('require', 'GA2AT', {site:123456, log:'log.xiti.com', pixel:'hit'})
 
     // Send a pageview
     ga('send', 'pageview');
@@ -57,12 +69,16 @@ GA2AT plugs on [analytics.js tasks](https://developers.google.com/analytics/devg
 ## Duplicated hit types
 
 This plugin doesn't duplicate all the data sent to GA.
+
 Here are the hit types duplicated, and how the will be converted to AT Internet
 
 ### `pageview`
 
 The most common GA hit type. Measure page views.
+
 In AT Internet, it will be tracked as a page view too.
+
+If the configuration `useTitle` is set to `true`, the page title will be used as the page name, otherwise, it will be the page URL.
 
 ### `event`
 

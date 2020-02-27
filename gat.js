@@ -2,6 +2,7 @@ function GA2AT(tracker, config) {
   var site = config.site || null;
   var log = config.log || 'logp.xiti.com';
   var pixel = config.pixel || 'hit.xiti';
+  var useTitle = config.useTitle || false;
 
   ga(function (tracker) {
 
@@ -13,7 +14,8 @@ function GA2AT(tracker, config) {
       var hitParams = null;
 
       if (site) {
-        var pageLabel = tracker.get('title');
+        var pageLabel = '';
+        if(useTitle) { pageLabel = tracker.get('title'); }
         var hitType = tracker.get('hitType');
 
         if (hitType === 'pageview') {
